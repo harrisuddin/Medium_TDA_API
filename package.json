@@ -17,7 +17,7 @@
     "url": "https://github.com/harrisuddin/Medium_TDA_API/issues"
   },
   "homepage": "https://github.com/harrisuddin/Medium_TDA_API#readme",
-  "devDependencies": {
+  "dependencies": {
     "express": "^4.17.1",
     "request": "^2.88.0"
   }
