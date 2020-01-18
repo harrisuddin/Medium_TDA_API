@@ -43,6 +43,10 @@ app.get('/auth', (req, res) => {
 
 });
 
+app.get('/reset', (req, res) => {
+    autoLogin();
+});
+
 async function autoLogin() {
 
     var details;
@@ -78,6 +82,12 @@ async function autoLogin() {
     await fs.writeFile('details.json', JSON.stringify(updatedTimes, null, 2), (err) => {
         if (err) console.error(err);
     }); 
+
+    await fs.readFile('details.json', (err, data) => {
+        if (err) console.error(err);
+        details = JSON.parse(data);
+        console.log(details);
+    });
 
     // Test page is correct with screenshot
     //await page.screenshot({path: 'example.png'});
