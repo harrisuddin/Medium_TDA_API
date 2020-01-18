@@ -19,6 +19,7 @@
   "homepage": "https://github.com/harrisuddin/Medium_TDA_API#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "puppeteer": "^2.0.0",
     "request": "^2.88.0"
   }
 }
