@@ -46,25 +46,31 @@ app.get('/auth', (req, res) => {
 
 app.get('/reset', (req, res) => {
     autoLogin().then(function(result) {
-        res.json(JSON.stringify(result, null, 2));
+        res.send(result);
     }, function(err) {
-        res.json(JSON.stringify(err, null, 2));
+        res.send(err);
     })
 });
 
+/*
+Automatically fill in the login form to authenticate the TDA app
+*/
 async function autoLogin() {
 
+    // Launch the browser
     const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
+
+    // Go to the authentication page
     await page.goto(`https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=${encodeURI(redirect_uri)}&client_id=${process.env.CLIENT_ID}%40AMER.OAUTHAP`);
 
     // Enter username
     await page.click('#username');
-    await page.keyboard.type("TrueAlpha");
+    await page.keyboard.type(process.env.USERNAME);
 
     // Enter password
     await page.click('#password');
-    await page.keyboard.type("dailyvolx16");
+    await page.keyboard.type(process.env.PASSWORD);
 
     // Click login button
     await page.click('#accept');
@@ -76,12 +82,10 @@ async function autoLogin() {
     var elem = await page.$("pre");
     var text = await page.evaluate(elem => elem.textContent, elem);
     
-    // log the tect
-    console.log(text);
-
     // Close browser
     await browser.close();
 
+    // return the text as a promise
     return text;
 
 }
