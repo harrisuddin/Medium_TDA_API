@@ -105,7 +105,7 @@ async function autoLogin() {
     // Close browser
     await browser.close();
 
-    return content;
+    return text;
 
 }
 
