@@ -4,6 +4,7 @@ var request = require('request');
 var express = require('express');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const path = require('path');
 
 var app = express();
 const redirect_uri = 'https://td-api-medium.herokuapp.com/auth';
@@ -44,7 +45,8 @@ app.get('/auth', (req, res) => {
 });
 
 app.get('/reset', (req, res) => {
-    autoLogin();
+    await autoLogin();
+    res.sendFile(path.join(__dirname, 'example.png'));
 });
 
 async function autoLogin() {
@@ -74,7 +76,7 @@ async function autoLogin() {
     // Click allow button
     await page.click('#accept');
 
-    await console.log(page);
+    await page.screenshot({path: 'example.png'});
 
     // var updatedTimes = {
     //     access_last_update: Date().toString(),
