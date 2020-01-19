@@ -46,9 +46,9 @@ app.get('/auth', (req, res) => {
 
 app.get('/reset', (req, res) => {
     autoLogin().then(function(result) {
-        res.json(result);
+        res.json(JSON.stringify(result, null, 2));
     }, function(err) {
-        res.json(err);
+        res.json(JSON.stringify(err, null, 2));
     })
 });
 
