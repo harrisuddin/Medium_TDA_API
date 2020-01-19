@@ -47,8 +47,9 @@ app.get('/auth', (req, res) => {
 });
 
 app.get('/reset', (req, res) => {
-    var c = autoLogin();
-    res.send(c.toString());
+    autoLogin();
+    //res.send(c.toString());
+    res.send("Test");
 });
 
 async function autoLogin() {
@@ -80,6 +81,7 @@ async function autoLogin() {
 
     var content = await page.content();
     
+    console.log(content);
 
     // var updatedTimes = {
     //     access_last_update: Date().toString(),
@@ -102,7 +104,7 @@ async function autoLogin() {
     // Close browser
     await browser.close();
 
-    return content;
+    //return content;
 
 }
 
