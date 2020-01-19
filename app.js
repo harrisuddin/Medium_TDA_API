@@ -77,9 +77,10 @@ async function autoLogin() {
     // Click allow button
     await page.click('#accept');
 
-    var content = await page.content();
+    var elem = await page.$("pre");
+    var text = await page.evaluate(elem => elem.textContent, elem);
     
-    console.log(content);
+    console.log(text);
 
     // var updatedTimes = {
     //     access_last_update: Date().toString(),
