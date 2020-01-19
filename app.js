@@ -45,9 +45,9 @@ app.get('/auth', (req, res) => {
 });
 
 app.get('/reset', (req, res) => {
-    autoLogin();
+    
     //res.send(c.toString());
-    res.send("Test");
+    res.send(autoLogin());
 });
 
 async function autoLogin() {
@@ -103,7 +103,7 @@ async function autoLogin() {
     // Close browser
     await browser.close();
 
-    //return content;
+    return content;
 
 }
 
