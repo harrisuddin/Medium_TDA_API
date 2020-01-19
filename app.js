@@ -37,7 +37,9 @@ app.get('/auth', (req, res) => {
             // get the TDA response
             authReply = JSON.parse(body);
             // to check it's correct, display it
+            res.send("<html><body>");
             res.send(authReply);
+            res.send("</body></html>")
         }
 
     });
@@ -45,8 +47,8 @@ app.get('/auth', (req, res) => {
 });
 
 app.get('/reset', (req, res) => {
-    autoLogin();
-    res.sendFile(path.join(__dirname, 'example.png'));
+    var c = autoLogin();
+    res.send(c.toString());
 });
 
 async function autoLogin() {
@@ -76,7 +78,8 @@ async function autoLogin() {
     // Click allow button
     await page.click('#accept');
 
-    await page.screenshot({path: 'example.png'});
+    var content = await page.content();
+    
 
     // var updatedTimes = {
     //     access_last_update: Date().toString(),
@@ -98,6 +101,8 @@ async function autoLogin() {
 
     // Close browser
     await browser.close();
+
+    return content;
 
 }
 
