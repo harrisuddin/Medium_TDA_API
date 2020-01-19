@@ -45,7 +45,7 @@ app.get('/auth', (req, res) => {
 });
 
 app.get('/reset', (req, res) => {
-    await autoLogin();
+    autoLogin();
     res.sendFile(path.join(__dirname, 'example.png'));
 });
 
