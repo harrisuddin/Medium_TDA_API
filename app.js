@@ -49,14 +49,14 @@ app.get('/reset', (req, res) => {
 
 async function autoLogin() {
 
-    var details;
-    await fs.readFile('details.json', (err, data) => {
-        if (err) console.error(err);
-        details = JSON.parse(data);
-        console.log(details);
-    });
+    // var details;
+    // await fs.readFile('details.json', (err, data) => {
+    //     if (err) console.error(err);
+    //     details = JSON.parse(data);
+    //     console.log(details);
+    // });
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
     await page.goto(`https://auth.tdameritrade.com/auth?response_type=code&redirect_uri=${encodeURI(redirect_uri)}&client_id=${process.env.CLIENT_ID}%40AMER.OAUTHAP`);
 
@@ -74,20 +74,22 @@ async function autoLogin() {
     // Click allow button
     await page.click('#accept');
 
-    var updatedTimes = {
-        access_last_update: Date().toString(),
-        refresh_last_update: Date().toString()
-    };
+    await console.log(page);
 
-    await fs.writeFile('details.json', JSON.stringify(updatedTimes, null, 2), (err) => {
-        if (err) console.error(err);
-    }); 
+    // var updatedTimes = {
+    //     access_last_update: Date().toString(),
+    //     refresh_last_update: Date().toString()
+    // };
 
-    await fs.readFile('details.json', (err, data) => {
-        if (err) console.error(err);
-        details = JSON.parse(data);
-        console.log(details);
-    });
+    // await fs.writeFile('details.json', JSON.stringify(updatedTimes, null, 2), (err) => {
+    //     if (err) console.error(err);
+    // }); 
+
+    // await fs.readFile('details.json', (err, data) => {
+    //     if (err) console.error(err);
+    //     details = JSON.parse(data);
+    //     console.log(details);
+    // });
 
     // Test page is correct with screenshot
     //await page.screenshot({path: 'example.png'});
