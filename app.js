@@ -37,9 +37,7 @@ app.get('/auth', (req, res) => {
             // get the TDA response
             authReply = JSON.parse(body);
             // to check it's correct, display it
-            res.send("<html><body>");
             res.send(authReply);
-            res.send("</body></html>")
         }
 
     });
