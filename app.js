@@ -45,9 +45,11 @@ app.get('/auth', (req, res) => {
 });
 
 app.get('/reset', (req, res) => {
-    
-    //res.send(c.toString());
-    res.send(autoLogin());
+    autoLogin().then(function(result) {
+        res.send(result);
+    }, function(err) {
+        res.send(err);
+    })
 });
 
 async function autoLogin() {
