@@ -46,20 +46,13 @@ app.get('/auth', (req, res) => {
 
 app.get('/reset', (req, res) => {
     autoLogin().then(function(result) {
-        res.send(result);
+        res.json(result);
     }, function(err) {
-        res.send(err);
+        res.json(err);
     })
 });
 
 async function autoLogin() {
-
-    // var details;
-    // await fs.readFile('details.json', (err, data) => {
-    //     if (err) console.error(err);
-    //     details = JSON.parse(data);
-    //     console.log(details);
-    // });
 
     const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
@@ -79,28 +72,12 @@ async function autoLogin() {
     // Click allow button
     await page.click('#accept');
 
+    // get the tokens from the pre element
     var elem = await page.$("pre");
     var text = await page.evaluate(elem => elem.textContent, elem);
     
+    // log the tect
     console.log(text);
-
-    // var updatedTimes = {
-    //     access_last_update: Date().toString(),
-    //     refresh_last_update: Date().toString()
-    // };
-
-    // await fs.writeFile('details.json', JSON.stringify(updatedTimes, null, 2), (err) => {
-    //     if (err) console.error(err);
-    // }); 
-
-    // await fs.readFile('details.json', (err, data) => {
-    //     if (err) console.error(err);
-    //     details = JSON.parse(data);
-    //     console.log(details);
-    // });
-
-    // Test page is correct with screenshot
-    //await page.screenshot({path: 'example.png'});
 
     // Close browser
     await browser.close();
