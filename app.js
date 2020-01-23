@@ -5,6 +5,8 @@ var express = require('express');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
+const detailsFileName = './details.json';
+var details = require(detailsFileName);
 
 var app = express();
 const redirect_uri = 'https://td-api-medium.herokuapp.com/auth';
@@ -81,6 +83,17 @@ async function autoLogin() {
     // get the tokens from the pre element
     var elem = await page.$("pre");
     var text = await page.evaluate(elem => elem.textContent, elem);
+    var jsonText = JSON.parse(text);
+    console.log(jsonText);
+    details.access_token = jsonText.access_token;
+    details.refresh_token = jsonText.refresh_token;
+    let time = Date().toString();
+    details.access_last_update = time;
+    details.refresh_last_update = time;
+
+    fs.writeFile(detailsFileName, JSON.stringify(details, null, 2), function (err) {
+        if (err) return console.log(err);
+    });
     
     // Close browser
     await browser.close();
