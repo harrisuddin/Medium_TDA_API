@@ -51,7 +51,17 @@ app.get('/reset', (req, res) => {
         res.send(result);
     }, function(err) {
         res.send(err);
-    })
+    });
+});
+
+app.get('/test_details', (req, res) => {
+    fs.readFile(detailsFileName, function (err, data) {
+        if (err) {
+            res.status(400).send(err);
+        } else {
+            res.send(data);
+        }
+    });
 });
 
 /*
@@ -83,14 +93,19 @@ async function autoLogin() {
     // get the tokens from the pre element
     var elem = await page.$("pre");
     var text = await page.evaluate(elem => elem.textContent, elem);
+    
+    // parse the response to a new object
     var jsonText = JSON.parse(text);
     console.log(jsonText);
+
+    // update the details file object
     details.access_token = jsonText.access_token;
     details.refresh_token = jsonText.refresh_token;
     let time = Date().toString();
     details.access_last_update = time;
     details.refresh_last_update = time;
 
+    // write the updated object to the details.json file
     fs.writeFile(detailsFileName, JSON.stringify(details, null, 2), function (err) {
         if (err) return console.log(err);
     });
@@ -98,7 +113,7 @@ async function autoLogin() {
     // Close browser
     await browser.close();
 
-    // return the text as a promise
+    // return the text
     return text;
 
 }
