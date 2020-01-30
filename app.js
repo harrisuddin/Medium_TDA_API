@@ -55,13 +55,7 @@ app.get('/reset', (req, res) => {
 });
 
 app.get('/test_details', (req, res) => {
-    fs.readFileSync(detailsFileName, function (err, data) {
-        if (err) {
-            res.status(400).send(err);
-        } else {
-            res.send(data);
-        }
-    });
+    res.send(JSON.stringify(details));
 });
 
 /*
