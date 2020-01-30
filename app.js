@@ -55,7 +55,7 @@ app.get('/reset', (req, res) => {
 });
 
 app.get('/test_details', (req, res) => {
-    fs.readFile(detailsFileName, function (err, data) {
+    fs.readFileSync(detailsFileName, function (err, data) {
         if (err) {
             res.status(400).send(err);
         } else {
