@@ -36,7 +36,7 @@ app.get('/auth', (req, res) => {
         // If there's no errors
         if (!error && response.statusCode == 200) {
             // get the TDA response
-            authReply = JSON.parse(body);
+            var authReply = JSON.parse(body);
             // to check it's correct, display it
             res.send(authReply);
         }
@@ -126,7 +126,7 @@ function resetAccessToken() {
     request(refresh_token_req, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             // get the TDA response
-            authReply = JSON.parse(body);
+            var authReply = JSON.parse(body);
             details.access_token = authReply.access_token;
             details.access_last_update = Date().toString();
 
