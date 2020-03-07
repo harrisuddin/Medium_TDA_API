@@ -4,7 +4,6 @@ var request = require('request');
 var express = require('express');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
-const path = require('path');
 const detailsFileName = './details.json';
 var details = require(detailsFileName);
 
@@ -47,15 +46,11 @@ app.get('/auth', (req, res) => {
 });
 
 app.get('/reset', (req, res) => {
-    autoLogin().then(function(result) {
+    autoLogin().then(function (result) {
         res.send(result);
-    }, function(err) {
+    }, function (err) {
         res.send(err);
     });
-});
-
-app.get('/test_details', (req, res) => {
-    res.send(JSON.stringify(details));
 });
 
 /*
@@ -64,7 +59,9 @@ Automatically fill in the login form to authenticate the TDA app
 async function autoLogin() {
 
     // Launch the browser
-    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
+    const browser = await puppeteer.launch({
+        args: ['--no-sandbox']
+    });
     const page = await browser.newPage();
 
     // Go to the authentication page
@@ -87,7 +84,7 @@ async function autoLogin() {
     // get the tokens from the pre element
     var elem = await page.$("pre");
     var text = await page.evaluate(elem => elem.textContent, elem);
-    
+
     // parse the response to a new object
     var jsonText = JSON.parse(text);
     console.log(jsonText);
@@ -101,15 +98,45 @@ async function autoLogin() {
 
     // write the updated object to the details.json file
     fs.writeFile(detailsFileName, JSON.stringify(details, null, 2), function (err) {
-        if (err) return console.log(err);
+        if (err) console.error(err);
     });
-    
+
     // Close browser
     await browser.close();
 
     // return the text
     return text;
 
+}
+
+function resetAccessToken() {
+    var refresh_token_req = {
+        url: 'https://api.tdameritrade.com/v1/oauth2/token',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        form: {
+            'grant_type': 'refresh_token',
+            'refresh_token': details.refresh_token,
+            'client_id': process.env.CLIENT_ID
+        }
+    };
+
+    request(refresh_token_req, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            // get the TDA response
+            authReply = JSON.parse(body);
+            details.access_token = authReply.access_token;
+            details.access_last_update = Date().toString();
+
+            // write the updated object to the details.json file
+            fs.writeFileSync(detailsFileName, JSON.stringify(details, null, 2), function (err) {
+                if (err) console.error(err);
+            });
+
+        }
+    });
 }
 
 // start server
