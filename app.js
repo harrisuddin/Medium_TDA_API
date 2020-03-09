@@ -201,7 +201,7 @@ function getQuote(ticker) {
 app.get('/quote/:ticker', (req, res) => {
     console.log(req.params);
     let quote = getQuote(req.params.ticker);
-    res.send(quote);
+    res.json(quote);
 });
 
 // start server
