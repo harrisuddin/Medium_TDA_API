@@ -190,6 +190,7 @@ function getQuote(ticker) {
             // get the TDA response
             var reply = JSON.parse(body);
             // to check it's correct, display it
+            console.log(reply);
             return reply;
         }
     });
