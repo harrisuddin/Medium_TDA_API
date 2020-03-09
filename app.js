@@ -167,18 +167,17 @@ function validateTokens() {
     let time = Date().toString();
     // if the refresh token is expired, then reset both tokens
     if (compareTimeDifference(details.refresh_last_update, time, Days90)) {
+        console.log("both updating");
         resetTokens();
     // if the access token is expired, then reset it
     } else if (compareTimeDifference(details.access_last_update, time, Minutes30)) {
+        console.log("refresh updating");
         resetAccessToken();
     }                  
 }
 
 function getQuote(ticker) {
-    console.log(ticker);
-    console.log(details);
     validateTokens();
-    console.log(details);
     var quoteReq = {
         url: `https://api.tdameritrade.com/v1/marketdata/${ticker}/quotes?apikey=${process.env.CLIENT_ID}`,
         method: 'GET',
@@ -201,7 +200,8 @@ function getQuote(ticker) {
 
 app.get('/quote/:ticker', (req, res) => {
     console.log(req.params);
-    res.send(getQuote(req.params.ticker));
+    let quote = getQuote(req.params.ticker);
+    res.send(quote);
 });
 
 // start server
