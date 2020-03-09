@@ -175,7 +175,10 @@ function validateTokens() {
 }
 
 function getQuote(ticker) {
+    console.log(ticker);
+    console.log(details);
     validateTokens();
+    console.log(details);
     var quoteReq = {
         url: `https://api.tdameritrade.com/v1/marketdata/${ticker}/quotes?apikey=${process.env.CLIENT_ID}`,
         method: 'GET',
@@ -197,6 +200,7 @@ function getQuote(ticker) {
 }
 
 app.get('/quote/:ticker', (req, res) => {
+    console.log(req.params);
     res.send(getQuote(req.params.ticker));
 });
 
