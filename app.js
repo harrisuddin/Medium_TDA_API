@@ -190,10 +190,14 @@ function getQuote(ticker) {
             // get the TDA response
             var reply = JSON.parse(body);
             // to check it's correct, display it
-            res.send(reply);
+            return reply;
         }
     });
 }
+
+app.get('/quote/:ticker', (req, res) => {
+    res.send(getQuote(req.params.ticker));
+});
 
 // start server
 var httpServer = http.createServer(app);
