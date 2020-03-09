@@ -185,17 +185,17 @@ function getQuote(ticker) {
             'Authorization': `Bearer ${details.access_token}`
         }
     };
-
+    var reply;
     request(quoteReq, function (error, response, body) {
         // If there's no errors
         if (!error && response.statusCode == 200) {
             // get the TDA response
-            var reply = JSON.parse(body);
+            reply = JSON.parse(body);
             // to check it's correct, display it
             console.log(reply);
-            return reply;
         }
     });
+    return reply;
 }
 
 app.get('/quote/:ticker', (req, res) => {
