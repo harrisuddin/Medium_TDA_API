@@ -185,23 +185,35 @@ function getQuote(ticker) {
             'Authorization': `Bearer ${details.access_token}`
         }
     };
-    var reply;
     request(quoteReq, function (error, response, body) {
         // If there's no errors
         if (!error && response.statusCode == 200) {
             // get the TDA response
-            reply = JSON.parse(body);
+            var reply = JSON.parse(body);
             // to check it's correct, display it
             console.log(reply);
         }
     });
-    return reply;
 }
 
 app.get('/quote/:ticker', (req, res) => {
-    console.log(req.params);
-    let quote = getQuote(req.params.ticker);
-    res.json(quote);
+    validateTokens();
+    var quoteReq = {
+        url: `https://api.tdameritrade.com/v1/marketdata/${req.params.ticker}/quotes?apikey=${process.env.CLIENT_ID}`,
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${details.access_token}`
+        }
+    };
+    request(quoteReq, function (error, response, body) {
+        // If there's no errors
+        if (!error && response.statusCode == 200) {
+            // get the TDA response
+            var reply = JSON.parse(body);
+            // to check it's correct, display it
+            res.send(reply);
+        }
+    });
 });
 
 // start server
